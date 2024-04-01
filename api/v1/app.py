@@ -1,39 +1,38 @@
 #!/usr/bin/python3
 """main app file for Flask instance in REST API
 """
-from flask import Flask
-from flask import jsonify
-from flask_cors import CORS
-from models import storage
 from api.v1.views import app_views
-import os
+from flask import Flask,  jsonify
+from os import environ
+from models import storage
+from flask_cors import CORS
 
 app = Flask(__name__)
 app.register_blueprint(app_views)
-CORS(app, resources={r'/*': {'origins': '0.0.0.0'}})
-
-
-def page_not_found(e):
-    """404 error json response"""
-    return jsonify({'error': "Not found"}), 404
+cors = CORS(app, resources={"/*": {"origins": "0.0.0.0"}})
 
 
 @app.teardown_appcontext
-def teardown_appcontext(exc=None):
-    """called on teardown of app contexts of flask
-    """
+def close_storage(exception=None):
+    """Close the storage when the app context is torn down."""
     storage.close()
 
+# Custom 404 error handler
 
-if __name__ == "__main__":
-    """run the app if the script is not being imported
-    """
-    app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
-    app.register_error_handler(404, page_not_found)
-    fetched_host = os.environ.get('HBNB_API_HOST')
-    fetched_port = os.environ.get('HBNB_API_PORT')
-    if fetched_host is None:
-        fetched_host = '0.0.0.0'
-    if fetched_port is None:
-        fetched_port = 5000
-    app.run(host=fetched_host, port=fetched_port, threaded=True)
+
+@app.errorhandler(404)
+def not_found(error):
+    """Handle 404 (Not Found) errors."""
+    return jsonify({"error": "Not found"}), 404
+
+
+if __name__ == '__main__':
+    if environ.get("HBNB_API_HOST") is None:
+        HBNB_API_HOST = '0.0.0.0'
+    else:
+        HBNB_API_HOST = environ.get("HBNB_API_HOST")
+    if environ.get("HBNB_API_PORT") is None:
+        HBNB_API_PORT = 5000
+    else:
+        HBNB_API_PORT = int(environ.get("HBNB_API_PORT"))
+    app.run(host=HBNB_API_HOST, port=HBNB_API_PORT, threaded=True)
