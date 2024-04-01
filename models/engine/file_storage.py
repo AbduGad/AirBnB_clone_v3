@@ -70,18 +70,30 @@ class FileStorage:
         self.reload()
     
     def get(self, cls, id):
-        """gets the object matching class and id input"""
-        if type(cls) != str or type(id) != str:
-            return None
-        for obj in self.__objects.values():
-            if obj.id == id and obj.__class__.__name__ == cls:
-                return obj
+        """
+        Get the object that matches the given id
+        from the json file.
+        """
+        for key, value in self.__objects.items():
+            if cls == value.__class__ or cls == value.__class__.__name__:
+                if value.id == id:
+                    return value
         return None
-
+    
     def count(self, cls=None):
-        """counts the amount of objects matching cls"""
+        """
+        Count the number of objects in the JSON file that match the specified class.
+        If cls is None, count all objects.
+        """
         if cls is None:
-            return len(self.all())
-        if type(cls) != str:
-            return 0
-        return len(self.all(cls))
+            return len(self.__objects)
+        elif isinstance(cls, str):
+            cls_name = cls
+        else:
+            cls_name = cls.__name__
+
+        count = 0
+        for key, value in self.__objects.items():
+            if value.__class__.__name__ == cls_name:
+                count += 1
+        return count
