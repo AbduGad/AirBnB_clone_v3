@@ -4,6 +4,7 @@ from flask import Flask
 from models import storage
 from api.v1.views import app_views 
 from flask import jsonify
+from flask import Response
 from os import getenv
 
 """doc"""
@@ -17,7 +18,7 @@ def teardown_db(exception):
     
 @app.errorhandler(404) 
 def not_found(e): 
-    return jsonify({"error": "Not found"})
+    return Response( jsonify({"error": "Not found"}),404)
 
 if __name__ == "__main__":
     # app.run(debug=True,host="0.0.0.0",port=5000,threaded=True)
