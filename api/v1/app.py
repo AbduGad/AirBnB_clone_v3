@@ -3,7 +3,6 @@
 from flask import Flask
 from models import storage
 from api.v1.views import app_views 
-from api.v1.views import statues
 """doc"""
 
 app = Flask(__name__)
