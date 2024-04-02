@@ -11,6 +11,7 @@ def statues():
 @app_views.route("/stats")
 def stats():
     """return count of class from the database"""
+    #? latency bug fixed
     storage.reload()
     cls_count_dict={
   "amenities": storage.count(amenity.Amenity) ,
