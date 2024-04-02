@@ -12,12 +12,12 @@ def statues():
 def stats():
     """return count of class from the database"""
     cls_count_dict={
-  "amenities": storage.count(amenity) ,
-  "cities": storage.count(city) ,
-  "places": storage.count(place)  ,
-  "reviews": storage.count(review) ,
-  "states":  storage.count(state) ,
-  "users":  storage.count(user),
+  "amenities": storage.count(amenity.Amenity) ,
+  "cities": storage.count(city.City) ,
+  "places": storage.count(place.Place)  ,
+  "reviews": storage.count(review.Review) ,
+  "states":  storage.count(state.State) ,
+  "users":  storage.count(user.User),
   
 }
     return jsonify(cls_count_dict)
