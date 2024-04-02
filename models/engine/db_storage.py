@@ -53,6 +53,9 @@ class DBStorage:
 
     def get(self, cls, id):
         """query on the current database session"""
+        # if id is None:
+        #     obj = self.__session.query(cls).all()
+        # else:
         obj = self.__session.query(cls).filter_by(id=id).first()
         return obj
     
