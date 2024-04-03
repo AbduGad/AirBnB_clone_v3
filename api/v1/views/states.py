@@ -7,8 +7,9 @@ from models.amenity import Amenity
 from flask import jsonify
 @app_views.route('/states', methods=['GET'])
 def get_states():
-    x=storage.all()
-    for key, value in x.items():
-        print(type(key),type(value))
-    return "{}"
+    cls_dict=storage.all()
+    all_states = [cls.to_dict() for id , cls in cls_dict.items()]
+    
+
+    return jsonify(all_states)
 
